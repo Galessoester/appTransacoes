@@ -12,15 +12,3 @@ class Conta {
 }
 
 enum TipoConta { contaCorrente, contaPoupanca, contaInvestimento }
-
-  obterDescricaoTipoConta (TipoConta tpConta) {
-    switch (tpConta) {
-      case TipoConta.contaCorrente:
-        return 'Conta Corrente';
-      case TipoConta.contaInvestimento:
-        return 'Investimentos';
-      case TipoConta.contaPoupanca:
-        return 'Conta Poupança';
-      default: return '';
-    }
-  }
