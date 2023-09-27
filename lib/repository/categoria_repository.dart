@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/categoria.dart';
 import '../models/tipo_transacao.dart';
@@ -8,75 +9,40 @@ class CategoriaRepository {
   Future<List<Categoria>> listarCategorias(
       {TipoTransacao? tipoTransacao}) async {
     await Future.delayed(const Duration(seconds: 5));
-    final categorias = [
-      Categoria(
-        id: 1,
-        descricao: 'Casa',
-        cor: Colors.deepPurple,
-        icone: Ionicons.home_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 2,
-        descricao: 'Alimentação',
-        cor: Colors.red,
-        icone: Ionicons.fast_food_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 3,
-        descricao: 'Lazer',
-        cor: Colors.orange,
-        icone: Ionicons.game_controller_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 4,
-        descricao: 'Educação',
-        cor: Colors.indigo,
-        icone: Ionicons.book_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 5,
-        descricao: 'Animais de estimação',
-        cor: Colors.brown,
-        icone: Ionicons.paw_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 6,
-        descricao: 'Transporte',
-        cor: Colors.blue,
-        icone: Ionicons.bus_outline,
-        tipoTransacao: TipoTransacao.despesa,
-      ),
-      Categoria(
-        id: 7,
-        descricao: 'Salário',
-        cor: Colors.green,
-        icone: Ionicons.cash_outline,
-        tipoTransacao: TipoTransacao.receita,
-      ),
-      Categoria(
-        id: 8,
-        descricao: 'Empréstimo',
-        cor: Colors.cyan,
-        icone: Ionicons.card_outline,
-        tipoTransacao: TipoTransacao.receita,
-      ),
-      Categoria(
-        id: 9,
-        descricao: 'Vendas',
-        cor: Colors.green,
-        icone: Ionicons.wallet_outline,
-        tipoTransacao: TipoTransacao.receita,
-      ),
-    ];
+    final supabase = Supabase.instance;
+    final rows = await supabase.client
+        .from('categorias')
+        .select<List<Map<String, dynamic>>>();
 
-    return categorias
-        .where((categoria) =>
-            tipoTransacao == null || categoria.tipoTransacao == tipoTransacao)
+    final categorias = rows
+        .map(
+          (row) => Categoria(
+            id: row['id'],
+            descricao: row['descricao'],
+            cor: Color(row['cor']),
+            icone: IoniconsData(row['icone']),
+            tipoTransacao: TipoTransacao.values[row['tipo_transacao']],
+            ativo: row['ativo'],
+          ),
+        )
         .toList();
+    return categorias;
+    //    var response = await http.get('https://api-flutter-ecommerce.herokuapp.com/categorias');
+    //    if (response!= null) {
+    //      List categoriasJson = jsonDecode(response.body);
+    //        return categoriasJson
+    //    } else {}
+    //    print("listarCategorias");
+    //    var query = QueryBuilder()..select().from('categorias').eq('id', id).single();
+    //    String sql ='select * from categorias where id=$id';
+    //    var result = await supabaseClient.query(sql, headers: {'apikey': '<KEY>'});
+    //    var result = await supabase.client
+    //      var result = await supabaseClient.rpc('listar_categorias', params: {"tipo": "receita"});
+    //      var result = await supabaseClient.table('categorias')!.select('*').execute();
+    //      var result = await supabaseClient.rpc('listar_categorias', params: {"tipo": "despesa"});
+    //      var result = await supabaseClient.rpc('listar_categorias', params: {});
+    //      var result = await supabaseClient.rpc('listar_categorias', params: {},headers:{'apikey':'<KEY>
+    //      var result = await supabaseClient.rpc('listar_categorias',params:{"tipo":"receita"},headers:{}
+    //      var result = await supabase.client.rpc('listar_categorias', params: {"tipo" : "receita
   }
 }

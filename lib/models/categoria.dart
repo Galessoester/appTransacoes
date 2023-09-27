@@ -7,6 +7,7 @@ class Categoria {
   Color cor = Colors.red;
   IconData icone;
   TipoTransacao tipoTransacao;
+  bool ativo;
 
   Categoria({
     required this.id,
@@ -14,5 +15,6 @@ class Categoria {
     required this.cor,
     required this.icone,
     required this.tipoTransacao,
+    required this.ativo,
   });
 }
